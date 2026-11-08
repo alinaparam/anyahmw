@@ -2,7 +2,7 @@
 <html lang="ru">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Anya · A1 Grammar Check</title>
+<title>A2 Grammar Check</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap">
 <style>
 :root{--bg:#FAF6F0;--surface:#FFFFFF;--ink:#2E2723;--muted:#7A6F67;--line:#E9E1D7;--acc:#C8704F;--acc-soft:#F8E6DD;--acc-ink:#8E4329;
@@ -70,13 +70,13 @@ header p{color:var(--muted);max-width:60ch;margin:12px 0 0;font-size:16.5px}
 @media (max-width:600px){.o{padding-left:0}.q .exp{padding-left:0}}
 </style>
 
-<div class="bar"><div class="bar-in"><div class="prog"><i id="pg"></i></div><span class="cnt" id="cnt">0 / 44</span></div></div>
+<div class="bar"><div class="bar-in"><div class="prog"><i id="pg"></i></div><span class="cnt" id="cnt">0 / 58</span></div></div>
 
 <main class="wrap">
 <header>
-  <div class="eyebrow">A1 grammar · check-up</div>
+  <div class="eyebrow">A2 grammar · check-up</div>
   <h1>Привет, Аня! Что ты уже знаешь? 🔎</h1>
-  <p>Это не экзамен, а небольшая диагностика. 22 темы уровня A1, по 2 вопроса на каждую. Так мы поймём, что ты уже уверенно знаешь, а что разберём на уроках.</p>
+  <p>Это не экзамен, а небольшая диагностика. 29 тем уровня A2, по 2 вопроса на каждую. Так мы поймём, что ты уже уверенно знаешь, а что разберём на уроках.</p>
   <div class="how">
     <span>1. Выбери один вариант в каждом вопросе.</span>
     <span>2. Если не знаешь, <b>нажми «🤷 Не знаю»</b>, а не угадывай. Это честнее и полезнее!</span>
@@ -110,80 +110,101 @@ const $ = s => document.querySelector(s);
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 /* [stage, [topic, subtitle, [[question, hint, right, [wrong...], explanation], ...]]] */
 const STAGES = [
- ['Stage 1', 'The basics of communication', [
-  ['Personal pronouns', 'I, you, he, she, it, we, they', [
-   ['This is Maria. ___ is my friend.', '', 'She', ['He', 'It'], 'Мария → she (она).'],
-   ['Tom and I are students. ___ are in class now.', 'Том и я…', 'We', ['They', 'You'], 'Том и я = мы → we.']]],
-  ['Verb “to be”', 'am / is / are', [
-   ['___ you a student?', '', 'Are', ['Is', 'Do'], 'you → are. Вопрос: Are you…?'],
-   ['My sister ___ at home now.', 'Моей сестры сейчас нет дома.', 'isn’t', ['aren’t', 'doesn’t'], 'she → is not = isn’t.']]],
-  ['Possessive adjectives', 'my, your, his, her, its, our, their', [
-   ['I have a cat. ___ cat is black.', '', 'My', ['Me', 'I'], 'мой → my.'],
-   ['Anna and Tom have a car. ___ car is red.', '', 'Their', ['They', 'There'], 'их → their.']]]]],
- ['Stage 2', 'Naming & describing things', [
-  ['Singular & plural nouns', 'a book / two books, child → children', [
-   ['I have two ___.', 'box', 'boxes', ['boxs', 'box'], 'После -x добавляем -es: boxes.'],
-   ['She has three ___.', 'child', 'children', ['childs', 'childrens'], 'child → children (исключение).']]],
-  ['this / that / these / those', 'близко и далеко', [
-   ['___ is my phone.', 'телефон у меня в руке', 'This', ['These', 'Those'], 'Один предмет рядом → this.'],
-   ['Look at ___ birds in the sky!', 'птицы далеко', 'those', ['that', 'this'], 'Много и далеко → those.']]],
-  ['Articles a / an', 'a cat, an apple', [
-   ['I eat ___ apple every day.', '', 'an', ['a', '—'], 'Перед гласным звуком → an.'],
-   ['She is ___ teacher.', '', 'a', ['an', '—'], 'Профессия → a teacher.']]],
-  ['Adjectives & word order', 'прилагательное перед существительным', [
-   ['Выбери правильное предложение:', '', 'It’s a big house.', ['It’s a house big.', 'It’s big a house.'], 'Прилагательное перед существительным: a big house.'],
-   ['Выбери правильное предложение:', '', 'They are nice people.', ['They are nices people.', 'They are people nice.'], 'У прилагательных нет -s: nice people.']]]]],
- ['Stage 3', 'Existence, location & possession', [
-  ['There is / there are', 'что где есть', [
-   ['___ a cat in the garden.', '', 'There is', ['There are', 'It is'], 'Один предмет → there is.'],
-   ['___ two cafés in my street.', '', 'There are', ['There is', 'They are'], 'Много → there are.']]],
-  ['Prepositions of place', 'in, on, under, next to', [
-   ['The cat is ___ the box.', 'кот внутри коробки', 'in', ['on', 'under'], 'внутри → in.'],
-   ['The bank is ___ the café.', 'банк рядом с кафе', 'next to', ['under', 'at'], 'рядом → next to.']]],
-  ['Have got / has got', 'I’ve got, she’s got', [
-   ['I ___ a dog.', '', 'have got', ['has got', 'am got'], 'I → have got.'],
-   ['She ___ blue eyes.', '', 'has got', ['have got', 'is got'], 'she → has got.']]]]],
- ['Stage 4', 'Actions & routines', [
-  ['Present Simple: statements', 'I work, she works', [
-   ['My dad ___ in a bank.', '', 'works', ['work', 'working'], 'he / she → глагол + s: works.'],
-   ['I ___ coffee every morning.', '', 'drink', ['drinks', 'am drink'], 'I → без -s: drink.']]],
-  ['Present Simple: negatives & questions', 'don’t / doesn’t, do / does', [
-   ['___ she like pizza?', '', 'Does', ['Do', 'Is'], 'she → Does she like…?'],
-   ['I ___ like cold weather.', '', 'don’t', ['doesn’t', 'am not'], 'I → don’t.']]],
-  ['Adverbs of frequency', 'always, usually, sometimes, never', [
-   ['Выбери правильное предложение:', '', 'I always get up at 7.', ['I get always up at 7.', 'Always I get up at 7.'], 'Наречие перед глаголом: I always get up.'],
-   ['Выбери правильное предложение:', '', 'She is never late.', ['She never is late.', 'Never she is late.'], 'С to be наречие после am / is / are: She is never late.']]],
+ ['Stage 1', 'Present tenses, in more depth', [
+  ['Present Simple vs Present Continuous', 'привычки и факты vs то, что происходит сейчас', [
+   ['Water ___ at 100 degrees.', 'Вода кипит при 100 градусах (факт).', 'boils', ['is boiling', 'boil'], 'Факт, всегда так → Present Simple: boils.'],
+   ['Can you call later? I ___ dinner right now.', '', 'am cooking', ['cook', 'cooks'], 'right now → Present Continuous: am cooking.']]]]],
+ ['Stage 2', 'Nouns & quantifiers', [
+  ['Countable vs uncountable nouns', 'a car / cars vs water, rice, money', [
+   ['Выбери правильное предложение:', '', 'I need some information.', ['I need some informations.', 'I need an information.'], 'information — неисчисляемое: без -s и без a/an.'],
+   ['Your money ___ on the table.', '', 'is', ['are', 'am'], 'money — неисчисляемое → is.']]],
+  ['some / any / no', 'There is some milk. There isn’t any bread.', [
+   ['There isn’t ___ bread.', '', 'any', ['some', 'no'], 'В отрицании (isn’t) → any.'],
+   ['Hurry up! There’s ___ time.', 'Совсем нет времени!', 'no', ['any', 'some'], 'There’s no… = совсем нет (no без not).']]],
+  ['much / many / a lot of / a little / a few', 'сколько: исчисляемые и неисчисляемые', [
+   ['How ___ water do you drink a day?', '', 'much', ['many', 'few'], 'water неисчисляемое → how much.'],
+   ['I have ___ friends in London, maybe three.', 'несколько друзей', 'a few', ['a little', 'much'], 'Исчисляемые, немного → a few.']]],
+  ['this / that / these / those', 'повторение: близко и далеко', [
+   ['___ shoes are mine.', 'туфли у меня в руках', 'These', ['This', 'That'], 'Много и рядом → these.'],
+   ['Who is ___ man over there?', 'вон тот мужчина', 'that', ['this', 'these'], 'Один и далеко → that.']]],
+  ['Articles a / an / the / —', 'полный повтор + устойчивые выражения', [
+   ['I can play ___ piano.', '', 'the', ['a', '—'], 'Музыкальные инструменты → the piano.'],
+   ['___ dogs are friendly animals.', 'собаки вообще, в целом', '—', ['The', 'A'], 'Говорим в общем о множественном → без артикля.']]]]],
+ ['Stage 3', 'Describing & comparing', [
+  ['Comparative adjectives', 'bigger, more interesting, better', [
+   ['This film is ___ than the book.', 'interesting', 'more interesting', ['interestinger', 'most interesting'], 'Длинное прилагательное → more interesting than.'],
+   ['My English is ___ now than last year.', 'good', 'better', ['gooder', 'more good'], 'good → better (исключение).']]],
+  ['Superlative adjectives', 'the biggest, the most interesting, the best', [
+   ['Everest is ___ mountain in the world.', 'high', 'the highest', ['the higher', 'the most high'], 'Короткое прилагательное → the + -est: the highest.'],
+   ['It was ___ day of my life!', 'bad', 'the worst', ['the baddest', 'the most bad'], 'bad → the worst (исключение).']]],
+  ['as … as', 'as tall as, not as expensive as', [
+   ['Tom is 180 cm. Ben is 180 cm. Tom is ___ Ben.', '', 'as tall as', ['as taller as', 'as tall than'], 'Одинаково → as + прилагательное + as.'],
+   ['The bus is ___ the taxi.', 'Автобус не такой дорогой, как такси.', 'not as expensive as', ['not as expensive than', 'not expensive as'], 'не такой…, как → not as … as.']]],
+  ['Adverbs of manner', 'quickly, carefully, well', [
+   ['Please drive ___.', 'careful', 'carefully', ['careful', 'carefuly'], 'Как? → наречие: careful + ly = carefully.'],
+   ['She speaks English very ___.', 'хорошо', 'well', ['good', 'goodly'], 'good → наречие well (исключение).']]]]],
+ ['Stage 4', 'Pronouns & connecting words', [
   ['Object pronouns', 'me, you, him, her, it, us, them', [
-   ['I love my mum. I call ___ every day.', '', 'her', ['she', 'hers'], 'её (кого?) → her.'],
-   ['Where are my keys? I can’t find ___.', '', 'them', ['they', 'it'], 'их (ключи) → them.']]]]],
- ['Stage 5', 'Ability & instructions', [
-  ['Can / can’t', 'I can swim. Can I…?', [
-   ['She ___ swim very well.', '', 'can', ['cans', 'can to'], 'После can просто глагол, без -s и to.'],
-   ['___ I open the window?', 'Можно открыть окно?', 'Can', ['Do', 'Am'], 'Просьба / разрешение → Can I…?']]],
-  ['Imperatives', 'Sit down. Don’t run.', [
-   ['___ down, please!', 'Садись, пожалуйста!', 'Sit', ['Sits', 'To sit'], 'Просьба/команда = глагол без to: Sit down.'],
-   ['___ run in the classroom!', 'Не бегай в классе!', 'Don’t', ['Not', 'No'], 'Запрет → Don’t + глагол.']]]]],
- ['Stage 6', 'Time & questions', [
-  ['Prepositions of time', 'in May, on Monday, at 6 o’clock', [
-   ['My birthday is ___ May.', '', 'in', ['on', 'at'], 'Месяц → in May.'],
-   ['See you ___ Monday!', '', 'on', ['in', 'at'], 'День недели → on Monday.']]],
-  ['Question words', 'what, where, when, who, how many…', [
-   ['___ do you live? — In Moscow.', '', 'Where', ['When', 'Who'], 'Где → where.'],
-   ['___ apples do you want? — Three.', '', 'How many', ['How much', 'What'], 'Можно посчитать → how many.']]]]],
- ['Stage 7', 'What’s happening now', [
-  ['Present Continuous', 'I’m working now', [
-   ['Look! It ___ .', 'Смотри! Идёт дождь.', 'is raining', ['rains', 'raining'], 'Сейчас → is + -ing.'],
-   ['I ___ TV now.', '', 'am watching', ['watch', 'watching'], 'Сейчас → am + -ing.']]],
-  ['Present Simple vs Present Continuous', 'обычно vs прямо сейчас', [
-   ['She usually ___ to work by bus.', '', 'goes', ['is going', 'go'], 'usually = обычно → Present Simple.'],
-   ['Shh! The baby ___ now.', '', 'is sleeping', ['sleeps', 'sleep'], 'now = сейчас → Present Continuous.']]]]],
- ['Stage 8', 'Talking about the past', [
-  ['Past Simple: “to be”', 'was / were', [
-   ['I ___ at home yesterday.', '', 'was', ['were', 'am'], 'I → was.'],
-   ['They ___ tired last night.', '', 'were', ['was', 'are'], 'they → were.']]],
-  ['Past Simple: verbs', 'worked, watched / went, saw, had', [
-   ['Yesterday I ___ a film.', '', 'watched', ['watch', 'watches'], 'Прошлое → -ed: watched.'],
-   ['Last summer we ___ to Sochi.', '', 'went', ['goed', 'go'], 'go → went (неправильный глагол).']]]]]
+   ['This is Anna. Do you know ___?', '', 'her', ['she', 'hers'], 'её (кого?) → her.'],
+   ['We’re at the café. Come and join ___!', '', 'us', ['we', 'our'], 'к нам (кого?) → us.']]],
+  ['Possessive pronouns', 'mine, yours, his, hers, ours, theirs', [
+   ['Is this your phone? — Yes, it’s ___.', '', 'mine', ['my', 'me'], 'Без существительного после → mine.'],
+   ['This isn’t our car. ___ is blue.', 'Наша — синяя.', 'Ours', ['Our', 'Us'], 'наша (без слова car) → ours.']]],
+  ['Reflexive pronouns', 'myself, yourself, himself…', [
+   ['Be careful! Don’t cut ___!', 'не порежься', 'yourself', ['you', 'yours'], 'себя (ты) → yourself.'],
+   ['He made this cake ___.', 'сам', 'himself', ['hisself', 'him'], 'сам (он) → himself.']]],
+  ['Prepositions of place & movement', 'in, on, under, between, from, into', [
+   ['The cat jumped ___ the box.', 'запрыгнул в коробку', 'into', ['at', 'from'], 'Движение внутрь → into.'],
+   ['The bank is ___ the café and the shop.', 'между', 'between', ['under', 'next'], 'между двумя → between.']]],
+  ['Prepositions of time', 'in June, on Monday, at 5 o’clock', [
+   ['I was born ___ 2010.', '', 'in', ['on', 'at'], 'Год → in 2010.'],
+   ['Let’s meet ___ Friday evening.', '', 'on', ['in', 'at'], 'День недели (даже с evening) → on Friday evening.']]],
+  ['Conjunctions', 'and, but, or, because, so, when', [
+   ['I was tired, ___ I went to bed early.', 'поэтому', 'so', ['because', 'but'], 'Следствие (поэтому) → so.'],
+   ['I stayed at home ___ it was raining.', 'потому что', 'because', ['so', 'but'], 'Причина (потому что) → because.']]]]],
+ ['Stage 5', 'Talking about the past', [
+  ['There was / there were', 'there is / are в прошлом', [
+   ['___ a lot of people at the party.', '', 'There were', ['There was', 'It was'], 'Много людей → there were.'],
+   ['___ any milk in the fridge yesterday.', 'Вчера в холодильнике не было молока.', 'There wasn’t', ['There weren’t', 'It wasn’t'], 'milk неисчисляемое → there wasn’t.']]],
+  ['Past Simple', 'правильные и неправильные глаголы, отрицания, вопросы', [
+   ['We ___ a new car last month.', 'buy', 'bought', ['buyed', 'buys'], 'buy → bought (неправильный глагол).'],
+   ['She didn’t ___ me yesterday.', 'call', 'call', ['called', 'calls'], 'После didn’t — глагол в начальной форме.']]],
+  ['Past Continuous', 'I was cooking when you called', [
+   ['At 8 pm yesterday we ___ dinner.', 'ужинали (в процессе)', 'were having', ['was having', 'are having'], 'we → were + -ing.'],
+   ['What ___ you doing at midnight?', '', 'were', ['was', 'did'], 'you → were … doing.']]],
+  ['Past Simple vs Past Continuous', 'I was walking when it started to rain', [
+   ['I was walking home when it ___ to rain.', '', 'started', ['was starting', 'starts'], 'Короткое действие прервало процесс → Past Simple.'],
+   ['She ___ a shower when the phone rang.', 'была в процессе', 'was taking', ['is taking', 'takes'], 'Длительное действие в прошлом → was + -ing.']]]]],
+ ['Stage 6', 'Ability, rules & advice', [
+  ['can / could', 'I can swim. I could swim when I was 5.', [
+   ['When I was five, I ___ swim.', '', 'could', ['can', 'can to'], 'Умение в прошлом → could.'],
+   ['I ___ come to the party yesterday. I was ill.', '', 'couldn’t', ['can’t', 'didn’t can'], 'Не мог в прошлом → couldn’t.']]],
+  ['must / mustn’t, have to / don’t have to', 'нужно, нельзя, не обязательно', [
+   ['It’s Sunday! You ___ get up early.', 'не нужно, не обязательно', 'don’t have to', ['mustn’t', 'doesn’t have to'], 'не обязательно → don’t have to.'],
+   ['You ___ smoke here. It’s a hospital.', 'нельзя', 'mustn’t', ['don’t have to', 'must'], 'нельзя, запрещено → mustn’t.']]],
+  ['should / shouldn’t', 'советы', [
+   ['You look tired. You ___ go to bed.', '', 'should', ['should to', 'shoulds'], 'После should — глагол без to.'],
+   ['You ___ eat so much sugar.', 'не стоит', 'shouldn’t', ['don’t should', 'not should'], 'не стоит → shouldn’t.']]],
+  ['Imperatives', 'Open the door. Don’t be late.', [
+   ['Выбери правильное предложение:', '', 'Don’t be late!', ['Not be late!', 'Don’t late!'], 'Запрет с прилагательным → Don’t be…'],
+   ['___ careful! The floor is wet.', 'Осторожно!', 'Be', ['Are', 'Is'], 'Команда → глагол в начальной форме: Be careful!']]]]],
+ ['Stage 7', 'The future & conditions', [
+  ['Verb + -ing vs verb + infinitive', 'enjoy doing / want to do', [
+   ['I enjoy ___ books.', '', 'reading', ['to read', 'read'], 'После enjoy → -ing.'],
+   ['I want ___ a doctor.', '', 'to be', ['being', 'be'], 'После want → to + глагол.']]],
+  ['Future forms', 'going to, will, Present Continuous', [
+   ['Look at those black clouds! It ___ rain.', 'видно, что будет дождь', 'is going to', ['going to', 'is go to'], 'Видим признаки → is going to.'],
+   ['I’m thirsty. — Wait, I ___ get you some water.', 'решение прямо сейчас', 'will', ['am going', 'going to'], 'Решение в момент речи → will.']]],
+  ['First conditional', 'If it rains, I will stay home.', [
+   ['If it rains tomorrow, I ___ at home.', '', 'will stay', ['would stay', 'stayed'], 'Реальное будущее → if + Present, will + глагол.'],
+   ['If you ___ hard, you will pass the exam.', '', 'study', ['will study', 'studied'], 'После if — Present Simple, не will.']]]]],
+ ['Stage 8', 'Present Perfect & full consolidation', [
+  ['Present Perfect (basic)', 'ever / never, just / already / yet', [
+   ['Have you ever ___ to London?', '', 'been', ['went', 'go'], 'have + 3-я форма: been.'],
+   ['I ___ finished my homework.', 'только что', 'have just', ['has just', 'am just'], 'I → have just + 3-я форма.']]],
+  ['Question formation, all tenses', 'Wh- questions и yes/no questions', [
+   ['Where ___ you go last summer?', '', 'did', ['were', 'do'], 'Прошлое + обычный глагол → did.'],
+   ['Выбери правильный вопрос:', '', 'What is she doing now?', ['What she is doing now?', 'What does she doing now?'], 'Вопрос: вопросительное слово + is + she + -ing.']]]]]
 ];
 const TOP = [], QS = []; let tn = 0;
 STAGES.forEach(([st, title, topics]) => topics.forEach(([name, sub, qs]) => { tn++; TOP.push({ n: tn, name, sub, st, q: [] }); qs.forEach(q => { const id = QS.length; QS.push({ id, t: tn - 1, s: q[0], h: q[1], a: q[2], o: shuffle([q[2], ...q[3]]), e: q[4], pick: null }); TOP[tn - 1].q.push(id); }); }));
@@ -210,7 +231,7 @@ $('#chk').onclick = () => {
   const ok = QS.filter(q => q.pick === q.a).length, pct = Math.round(ok / QS.length * 100);
   $('#big').textContent = `${ok}/${QS.length}`;
   const weak = TOP.filter(t => t.q.filter(id => QS[id].pick === QS[id].a).length < 2).length;
-  $('#msg').textContent = pct >= 90 ? `${pct}% — отлично! A1 почти весь в кармане 🎉` : pct >= 60 ? `${pct}% — хорошая база! Есть ${weak} тем, которые подтянем на уроках 💪` : `${pct}% — нормально для старта! Теперь мы точно знаем, с чего начать 🌱`;
+  $('#msg').textContent = pct >= 90 ? `${pct}% — отлично! A2 почти весь в кармане 🎉` : pct >= 60 ? `${pct}% — хорошая база! Есть ${weak} тем, которые подтянем на уроках 💪` : `${pct}% — нормально для старта! Теперь мы точно знаем, с чего начать 🌱`;
   $('#map').innerHTML = TOP.map(t => { const s = t.q.filter(id => QS[id].pick === QS[id].a).length; const c = s === 2 ? 'var(--good)' : s === 1 ? 'var(--mid)' : 'var(--bad)';
     return `<div class="row" style="--c:${c}"><span class="k">${t.n}</span><div><b>${t.name}</b><small>${t.sub}</small></div><span class="v">${s === 2 ? '✓ знаешь' : s === 1 ? '1/2 повторить' : '0/2 разобрать'}</span></div>`; }).join('');
   $('#res').hidden = false; $('#res').scrollIntoView({ behavior: 'smooth' });
@@ -225,7 +246,7 @@ $('#sendB').onclick = async () => {
   const ok = QS.filter(q => q.pick === q.a).length;
   const parts = TOP.map(t => { const s = t.q.filter(id => QS[id].pick === QS[id].a).length; return `${s === 2 ? '✅' : s === 1 ? '🟡' : '🔴'} ${t.n}. ${t.name}: ${s}/2`; }).join('\n');
   const mistakes = QS.filter(q => q.pick !== q.a).map(q => `${TOP[q.t].n}. ${TOP[q.t].name} — ${q.s.replace('___', '___')}${q.h ? ' (' + q.h + ')' : ''} → ${q.pick === '?' ? 'не знаю' : q.pick} (нужно: ${q.a})`);
-  const data = { student: 'Аня', hw: 'A1 grammar check · 22 topics', score: `${ok}/${QS.length}`, pct: Math.round(ok / QS.length * 100) + '%', parts, mistakes };
+  const data = { student: 'Аня', hw: 'A2 grammar check · 29 topics', score: `${ok}/${QS.length}`, pct: Math.round(ok / QS.length * 100) + '%', parts, mistakes };
   $('#sendB').disabled = true; $('#sendMsg').textContent = 'Отправляю…';
   try { await fetch(SEND_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) }); $('#sendMsg').textContent = 'Отправлено ✓ Спасибо!'; }
   catch (e) { $('#sendB').disabled = false; $('#sendMsg').textContent = 'Не получилось отправить. Проверь интернет и нажми ещё раз.'; }
